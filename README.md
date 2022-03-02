@@ -119,3 +119,13 @@ Takeaways from this set of data would be:
 
 ##### Word Length
 When I was a kid, I used to play [Cows and Bulls](https://en.wikipedia.org/wiki/Bulls_and_Cows) with my family. This game is largely similar, except we would typically use four-letter words. Wordle, of course, uses 5. Right after the Wordle bubble started, I saw people start posting variations with much larger words, with the implication that these offered more of a challenge. I was a bit puzzled, since I figured there are fewer long words that fit any given pattern, and longer guesswords offer more information per guess. So I did a quick simulation to see how this actually plays out.
+
+![image](https://user-images.githubusercontent.com/28656813/156452102-449c2f34-1e8e-4f66-840a-064d10368621.png)
+![image](https://user-images.githubusercontent.com/28656813/156452114-ecfd14e9-65c6-4852-97ef-de4bd8e2b27d.png)
+
+As I expected, longer words are actually *easier* to figure out than shorter ones.
+
+### Ideas to Play With Later
+
+- Changing the thresholding approach for sacrifice guessing to be based on what percentage of the dictionary is left. Might enable more efficient sacrifice guessing?
+- I realised about halfway through this that there is a better approach to weighting guesswords - rather than counting how many letters from a desired list are in a potential guessword, one could weight by frequency. This could improve sacrifice guessing. As pointed out above, a common situation is `arose` -> `blind` -> `caput`, but `caput` isn't the optimal guess here since it reuses `a`. This is a consequence of how I do my weighting. However, I also wonder the degree to which it would matter, since it seems like going past one sacrifice guess is suboptimal anyway. This type of weighting could also make max frequency guessing just a bit better.
