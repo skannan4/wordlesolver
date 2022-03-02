@@ -54,5 +54,11 @@ It took the computer 3 guesses to correctly guess the word in max mode.
 
 ##### Half Frequency Solver
 
-As mentioned above, I didn't think *too* carefully about my solving strategies, so another idea that I thought would be interesting is to use what I call a "Guess Who"-style half frequency solver. Basically, rather that using the *most frequently* appearing letters in the guessword, I wanted to use letters whose frequency was closest to 50%, so that the list would be more efficiently split. For the first guess or so, `arose` is still the most popular choice; however, with later guesses, this changes. However, my initial quick simulations showed that the half solver does worse than the max solver, and I suppose in retrospect that's not too difficulty to understand.
-![image](https://user-images.githubusercontent.com/28656813/156402266-35139247-c7e1-42fd-95e7-6ab6fc982c0f.png)
+As mentioned above, I didn't think *too* carefully about my solving strategies, so another idea that I thought would be interesting is to use what I call a "Guess Who"-style half frequency solver. Basically, rather that using the *most frequently* appearing letters in the guessword, I wanted to use letters whose frequency was closest to 50%, so that the list would be more efficiently split. For the first guess or so, `arose` is still the most popular choice; however, with later guesses, I expected this would change. However, in reality, they actually guessed fairly similarly throughout, and benchmarking them also validated that.
+
+![image](https://user-images.githubusercontent.com/28656813/156404797-430317c0-42d9-4685-aa42-e6bc2cae7387.png)
+
+![image](https://user-images.githubusercontent.com/28656813/156404819-f0d6436f-2725-4516-b0cc-5956c4ee579f.png)
+
+
+
