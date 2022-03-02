@@ -83,5 +83,16 @@ Guessword is cured
 It took the computer 3 guesses to correctly guess the word in sacrifice mode.
 The computer also used 1 sacrifice guesses.
 ```
+### Benchmarking the Different Approaches
 
+Ok - moment of truth. I tested each of the methods on 500 randomly selected words from the dictionary. Results are here:
 
+![image](https://user-images.githubusercontent.com/28656813/156413034-6d2955f6-0d96-4904-bcbe-ab6fb0db5523.png)
+![image](https://user-images.githubusercontent.com/28656813/156413045-b8c378cd-5385-40a4-bca9-a1c5aab83bf1.png)
+![image](https://user-images.githubusercontent.com/28656813/156413063-d51a59df-938d-4a2e-9e91-1d2bec0a7a7e.png)
+
+I think there were a couple of interesting and useful takeaways:
+- Thankfully, both the max and half frequency solvers beat the random solver by a decent bit. Switching to the max solver saves an average of 1 letter every 3.25 words played. In this run, the max frequency solver marginally beat out the half frequency solver in both guesses (4.522/91.0% for max vs 4.576/89.6% for half), but I suspect this is within some margin of error.
+- Sacrifice guessing at threshold 1 and 2 really didn't improve the guessing all that much compared to the max frequency solver - switching to sacrifice with threshold 2 saves 1 letter every 18.5 games with ~2% improvement in success rate. This was a somewhat unexpected result for me, given that I would think having more information would always be a good thing (in fact, I usually go `saint` -> `horde` nearly every game, unless I guess 4 letters right off the bat). I wonder if this is because with the max solver, the computer is already incredibly efficient at narrowing down remaining words in the dictionary. Of course, I don't use positional information, but I suspect that this wouldn't actually change things much. What *might* make the sacrifice guesser more efficient is making the decision to guess based on the number of words left in the dictionary instead.
+- Obviously, sacrifice guessing at higher thresholds is bad - once the computer has enough letters, it should just start hunting for the win. (I plan on trying this approach myself, and not sacrifice guessing when I've already got three letters off of my first word).
+- At threshold of 1, the sacrifice solver does one sacrifice guess every 2.85 games, while at threshold of 2 is does a sacrifice guess more or less every game. I wonder if there is more of a balancing act to the cost-benefit of sacrifice guessing than I imagined, which is why as above I wonder if the rationale to sacrifice guess should be based on number of remaining words in the dictionary rather than number of letters obtained.
