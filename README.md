@@ -8,7 +8,7 @@ A related point is that I'm sure word-searching is fairly well-studied, and that
 With that, here's what I've got.
 
 ### Different Solving Approaches
-For clarity, the way I am displaying results here is in the form `[(0-2), (0-2), (0-2), (0-2), (0-2)]`, where `0` indicates no match (grey in Wordle), `1` indicates match in the wrong spot (yellow in Wordle), and `2` indicates complete match (green in Wordle). My default dictionary is a Scrabble dictionary taken from [Will McGugan] (https://twitter.com/willmcgugan/status/1478045889423941636), which has 8,672 5-letter words.
+For clarity, the way I am displaying results here is in the form `[(0-2), (0-2), (0-2), (0-2), (0-2)]`, where `0` indicates no match (grey in Wordle), `1` indicates match in the wrong spot (yellow in Wordle), and `2` indicates complete match (green in Wordle). My default dictionary is a Scrabble dictionary taken from [Will McGugan](https://twitter.com/willmcgugan/status/1478045889423941636), which has 8,672 5-letter words.
 
 ##### Random Solver
 An easy starting point is a solver that just guesses the next word randomly. Here's an example of the solver trying to guess `aroma`, which was a previous solution.
