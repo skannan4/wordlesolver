@@ -8,11 +8,9 @@ A related point is that I'm sure word-searching is fairly well-studied, and that
 With that, here's what I've got.
 
 ### Different Solving Approaches
-
 For clarity, the way I am displaying results here is in the form `[(0-2), (0-2), (0-2), (0-2), (0-2)]`, where `0` indicates no match (grey in Wordle), `1` indicates match in the wrong spot (yellow in Wordle), and `2` indicates complete match (green in Wordle). My default dictionary is a Scrabble dictionary taken from [Will McGugan] (https://twitter.com/willmcgugan/status/1478045889423941636), which has 8,672 5-letter words.
 
 ##### Random Solver
-
 An easy starting point is a solver that just guesses the next word randomly. Here's an example of the solver trying to guess `aroma`, which was a previous solution.
 
 ```
@@ -34,7 +32,6 @@ It took the computer 4 guesses to correctly guess the word in random mode.
 ```
 
 ##### Max Frequency Solver
-
 The next iteration would be one that looks for what letters most frequently occur in the remaining possible guesswords, and then tries to make a guessword that contains as many of those letters as possible. Note that there are usually multiple possible guesswords that could fulfill this criteria. Rather than selecting randomly, I just picked the one at the top of the list, both because I found that it didn't make a difference on average, and because I liked the determinism - it meant I could pick out a consistent guessing strategy. By the way, using this dictionary, the top letters in order are: s, e, a, o, r, i, l, n, t, d; this explains the popularity of openings like `soare` or, as my solver does here, `arose`. Here's the solver working on `caulk`.
 
 ```
@@ -53,7 +50,6 @@ It took the computer 3 guesses to correctly guess the word in max mode.
 ```
 
 ##### Half Frequency Solver
-
 As mentioned above, I didn't think *too* carefully about my solving strategies, so another idea that I thought would be interesting is to use what I call a "Guess Who"-style half frequency solver. Basically, rather that using the *most frequently* appearing letters in the guessword, I wanted to use letters whose frequency was closest to 50%, so that the list would be more efficiently split. For the first guess or so, `arose` is still the most popular choice; however, with later guesses, I expected this would change. However, in reality, they actually guessed fairly similarly throughout, and benchmarking them also validated that.
 
 ![image](https://user-images.githubusercontent.com/28656813/156404797-430317c0-42d9-4685-aa42-e6bc2cae7387.png)
@@ -62,7 +58,6 @@ As mentioned above, I didn't think *too* carefully about my solving strategies, 
 Mean guess here was 4.66 vs 4.62 respectively.
 
 ##### Sacrifice Guessing
-
 The above strategies are intuitive and work for hard mode of Wordle. However, I don't play Wordle on hard mode (truthfully, I think it gets rid of the fun part of Wordle), and a key part of my tactic is "sacrifice guessing." This is where you guess a word that you know will be wrong to maximize testing new letters. However, a good question would be when to sacrifice guess and when to try and just get the word. To figure this out, I set in a threshold number of letters. If you know at or below the threshold number of letters in the keyword (regardless of position), you sacrifice guess; if not, you max frequency guess. (As an example, say the threshold is 2 - if you only know 0-2 letters of the keyword, you sacrifice guess). Note that your sacrifice guess can reuse earlier letters, you just try to avoid that! Because I always select the top word in the list if there are multiple options, I could come up with a favoured sacrifice guess approach. Based on the letter frequencies above, my preferred opening of `saint` -> `horde` is probably not the *most* optimal; the computer goes `arose` -> `blind` -> `caput`.
 
 An example is below, using the randomly selected keyword `cured`.
@@ -84,7 +79,6 @@ It took the computer 3 guesses to correctly guess the word in sacrifice mode.
 The computer also used 1 sacrifice guesses.
 ```
 ### Benchmarking the Different Approaches
-
 Ok - moment of truth. I tested each of the methods on 500 randomly selected words from the dictionary. Results are here:
 
 ![image](https://user-images.githubusercontent.com/28656813/156413034-6d2955f6-0d96-4904-bcbe-ab6fb0db5523.png)
@@ -98,7 +92,6 @@ I think there were a couple of interesting and useful takeaways:
 - At threshold of 1, the sacrifice solver does one sacrifice guess every 2.85 games, while at threshold of 2 is does a sacrifice guess more or less every game. I wonder if there is more of a balancing act to the cost-benefit of sacrifice guessing than I imagined, which is why as above I wonder if the rationale to sacrifice guess should be based on number of remaining words in the dictionary rather than number of letters obtained.
 
 ##### Different Libraries
-
 But wait - the results above also showed something else that was weird to me. Take the sacrifice solvers, at either threshold 1 or 2. They are both at about 4.45 guesses/word, with ~92-93% success rate. However, let's say I benchmark against myself (as noted, I only play on easy mode) - on 55 games, I'm at 3.8/100%. In short, I'm whooping all of my computers by quite a bit! That's not usually supposed to happen.
 
 A quick look at the Scrabble dictionary gave me a potential explanation. Just looking at the top, there are words like `aahed`, `abhmo`, `adzes` etc. (I remember people throwing a fit over `cynic`!) In short, the solver not only might encounter more words than I am likely to see, but also has to eliminate more possibilities (certainly possibilities I wouldn't even need to consider) to get to simple answers. To test this possibility out, I explored several input dictionaries:
@@ -112,5 +105,16 @@ Just for record-keeping, here is the overlap in the lists (yes, done in R, which
 
 ![test](https://user-images.githubusercontent.com/28656813/156440323-b6b909e1-db85-4559-938a-533ee1e097d9.png)
 
+As you can see, the Scrabble list is largely encompassed by the Wordle list. The Wordle and top 100,000 lists each have their own pool of unique words (I have no idea what some of these Wordle words are, but many of the unique top 100,000 words appear of foreign origin). The Google project word lists have their own unique words, though many of them appear to be proper names.
 
+So given these dictionaries, here were the benchmarking results:
+![image](https://user-images.githubusercontent.com/28656813/156441391-5355d026-2f6a-4cb8-b778-0fe4a6035bf3.png)
+![image](https://user-images.githubusercontent.com/28656813/156441463-ffa00770-cd7b-4a41-8dea-4016a918d516.png)
+![image](https://user-images.githubusercontent.com/28656813/156441484-15ac1f73-3625-482b-ae86-1c693db4bca1.png)
 
+Takeaways from this set of data would be:
+- As expected, the average number of guesses was correlated with the dictionary size. Using the Sacrifice T1 as a guesser, the average guesses per game was ~3.6 for the top 10,000 dictionary, and ~3.75 for the 20,000, with close to 100% rates for both (not shown here). The latter isn't too far off from my own personal record, so I wonder if that suggests that I account for ~2500 words in my head when I play Wordle (which comes out to about 20% of Wordle's accepted dictionary, by the way).
+- As above, the sacrifice approach really doesn't improve on max frequency guess; in fact, Sacrifice T2 seems to routinely perform a bit *worse* for the smaller dictionaries.
+
+##### Word Length
+When I was a kid, I used to play [Cows and Bulls](https://en.wikipedia.org/wiki/Bulls_and_Cows) with my family. This game is largely similar, except we would typically use four-letter words. Wordle, of course, uses 5. Right after the Wordle bubble started, I saw people start posting variations with much larger words, with the implication that these offered more of a challenge. I was a bit puzzled, since I figured there are fewer long words that fit any given pattern, and longer guesswords offer more information per guess. So I did a quick simulation to see how this actually plays out.
