@@ -59,5 +59,29 @@ As mentioned above, I didn't think *too* carefully about my solving strategies, 
 ![image](https://user-images.githubusercontent.com/28656813/156404797-430317c0-42d9-4685-aa42-e6bc2cae7387.png)
 ![image](https://user-images.githubusercontent.com/28656813/156404819-f0d6436f-2725-4516-b0cc-5956c4ee579f.png)
 
+Mean guess here was 4.66 vs 4.62 respectively.
+
+##### Sacrifice Guessing
+
+The above strategies are intuitive and work for hard mode of Wordle. However, I don't play Wordle on hard mode (truthfully, I think it gets rid of the fun part of Wordle), and a key part of my tactic is "sacrifice guessing." This is where you guess a word that you know will be wrong to maximize testing new letters. However, a good question would be when to sacrifice guess and when to try and just get the word. To figure this out, I set in a threshold number of letters. If you know at or below the threshold number of letters in the keyword (regardless of position), you sacrifice guess; if not, you max frequency guess. (As an example, say the threshold is 2 - if you only know 0-2 letters of the keyword, you sacrifice guess). Note that your sacrifice guess can reuse earlier letters, you just try to avoid that! Because I always select the top word in the list if there are multiple options, I could come up with a favoured sacrifice guess approach. Based on the letter frequencies above, my preferred opening of `saint` -> `horde` is probably not the *most* optimal; the computer goes `arose` -> `blind` -> `caput`.
+
+An example is below, using the randomly selected keyword `cured`.
+
+```
+Playing computer vs computer game, sacrifice mode!
+Threshold is 2
+A random word has been selected!
+There are 8672 possible guesswords remaining
+Guessword is arose
+[0, 1, 0, 0, 1]
+There are 283 possible guesswords remaining
+Guessword is blind
+[0, 0, 0, 0, 2]
+There are 10 possible guesswords remaining
+Guessword is cured
+[2, 2, 2, 2, 2]
+It took the computer 3 guesses to correctly guess the word in sacrifice mode.
+The computer also used 1 sacrifice guesses.
+```
 
 
