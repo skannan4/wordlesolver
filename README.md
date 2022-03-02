@@ -3,7 +3,7 @@
 ### Introduction
 The ostensible purpose of this project was to develop some simpler Wordle solvers in Python. The secondary goal was for me to refresh my Python skills a bit, since I really haven't play with it much since college and only intermittently used it in my grad school projects (R was just too convenient for seq). However, the *real* purpose of all of this was to procastinate on studying for my medicine shelf (which I eventually passed!). In that sense, it should be noted that this code is not optimized for speed, it is not optimized for pythonic quality - it is simply optimized for my amusement and entertainment.
 
-A related point is that I'm sure word-searching is fairly well-studied, and that aside there are probably many people who have already come up with similar/better solvers (that's how `SOARE` became everyone's hipster opening, after all). There's also this [competition](https://github.com/Kinkelin/WordleCompetition) to improve Wordle solvers. My whole point was to look at none of that - I didn't want to put any more effort into this than I do playing Wordle anyway.
+A related point is that I'm sure word-searching is fairly well-studied, and that aside there are probably many people who have already come up with similar/better solvers (that's how `soare` became everyone's hipster opening, after all). There's also this [competition](https://github.com/Kinkelin/WordleCompetition) to improve Wordle solvers. My whole point was to look at none of that - I didn't want to put any more effort into this than I do playing Wordle anyway.
 
 With that, here's what I've got.
 
@@ -18,7 +18,6 @@ An easy starting point is a solver that just guesses the next word randomly. Her
 ```
 Playing computer vs computer game, random mode!
 Using input word!
-aroma
 There are 8672 possible guesswords remaining
 Guessword is slank
 [0, 0, 1, 0, 0]
@@ -33,3 +32,27 @@ Guessword is aroma
 [2, 2, 2, 2, 2]
 It took the computer 4 guesses to correctly guess the word in random mode.
 ```
+
+##### Max Frequency Solver
+
+The next iteration would be one that looks for what letters most frequently occur in the remaining possible guesswords, and then tries to make a guessword that contains as many of those letters as possible. Note that there are usually multiple possible guesswords that could fulfill this criteria. Rather than selecting randomly, I just picked the one at the top of the list, both because I found that it didn't make a difference on average, and because I liked the determinism - it meant I could pick out a consistent guessing strategy. By the way, using this dictionary, the top letters in order are: s, e, a, o, r, i, l, n, t, d; this explains the popularity of openings like `soare` or, as my solver does here, `arose`. Here's the solver working on `caulk`.
+
+```
+Playing computer vs computer game, max mode!
+Using input word!
+There are 8672 possible guesswords remaining
+Guessword is arose
+[1, 0, 0, 0, 0]
+There are 468 possible guesswords remaining
+Guessword is inlay
+[0, 0, 1, 1, 0]
+There are 26 possible guesswords remaining
+Guessword is caulk
+[2, 2, 2, 2, 2]
+It took the computer 3 guesses to correctly guess the word in max mode.
+```
+
+##### Half Frequency Solver
+
+As mentioned above, I didn't think *too* carefully about my solving strategies, so another idea that I thought would be interesting is to use what I call a "Guess Who"-style half frequency solver. Basically, rather that using the *most frequently* appearing letters in the guessword, I wanted to use letters whose frequency was closest to 50%, so that the list would be more efficiently split. For the first guess or so, `arose` is still the most popular choice; however, with later guesses, this changes. However, my initial quick simulations showed that the half solver does worse than the max solver, and I suppose in retrospect that's not too difficulty to understand.
+![image](https://user-images.githubusercontent.com/28656813/156402266-35139247-c7e1-42fd-95e7-6ab6fc982c0f.png)
