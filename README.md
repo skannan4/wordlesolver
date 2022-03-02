@@ -109,6 +109,7 @@ As you can see, the Scrabble list is largely encompassed by the Wordle list. The
 
 So given these dictionaries, here were the benchmarking results:
 ![image](https://user-images.githubusercontent.com/28656813/156441391-5355d026-2f6a-4cb8-b778-0fe4a6035bf3.png)
+
 ![image](https://user-images.githubusercontent.com/28656813/156441463-ffa00770-cd7b-4a41-8dea-4016a918d516.png)
 ![image](https://user-images.githubusercontent.com/28656813/156441484-15ac1f73-3625-482b-ae86-1c693db4bca1.png)
 
