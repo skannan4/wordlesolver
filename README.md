@@ -110,4 +110,6 @@ A quick look at the Scrabble dictionary gave me a potential explanation. Just lo
 
 Just for record-keeping, here is the overlap in the lists. 
 
-![test](https://user-images.githubusercontent.com/28656813/156440089-5ff7f25b-6442-4042-9c2f-ab1f79dad0e6.png)
+![test](https://user-images.githubusercontent.com/28656813/156440239-ecb37ad3-0c49-4baf-ac6f-8d13f23321d6.png)
+
+
